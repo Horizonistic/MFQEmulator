@@ -85,4 +85,14 @@ public class ObjectQueue
         rear = count - 1;
         item = temp;
     }
+
+    public void dump(SuperOutput so)
+    {
+        for (int i = 0; i < this.count; i++)
+        {
+            so.println(this.query());
+            this.insert(this.remove());
+        }
+
+    }
 }

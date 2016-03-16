@@ -9,4 +9,5 @@ public interface ObjectQueueInterface
     public void insert(Object o);
     public Object remove();
     public Object query();
+    public void dump(SuperOutput so);
 }

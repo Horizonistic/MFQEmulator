@@ -1,5 +1,7 @@
 package util;
 
+import main.Job;
+
 public class ObjectQueue
 {
     private Object[] item;
@@ -90,7 +92,7 @@ public class ObjectQueue
     {
         for (int i = 0; i < this.count; i++)
         {
-            so.println(this.query());
+            so.println(((Job) this.query()).pid);
             this.insert(this.remove());
         }
 

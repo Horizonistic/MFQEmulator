@@ -1,7 +1,9 @@
+package main;
+
 public class Job
 {
-    private int pid;
-    private int arrivalTime;
+    public int pid;
+    public int arrivalTime;
     private int timeRequired;
     private int timeRemaining;
     private int currentLevel;

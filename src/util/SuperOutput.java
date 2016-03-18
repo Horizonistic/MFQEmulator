@@ -8,7 +8,7 @@ import java.io.*;
  *
  * @author Richard Stegman
  * @author Horizonistic
- * @version 1.3
+ * @version 1.3.1
  */
 public class SuperOutput {
     PrintWriter pw;
@@ -65,8 +65,8 @@ public class SuperOutput {
     {
         if (pw == null)
             return;
-        System.out.printf("\n");
-        pw.printf("\n");
+        System.out.print("\n");
+        pw.print("\n");
     }
 
     /**
@@ -78,8 +78,8 @@ public class SuperOutput {
             return;
         for (Object arg : args)
         {
-            System.out.printf("\n" + arg);
-            pw.printf("\n" + arg);
+            System.out.print("\n" + arg);
+            pw.print("\n" + arg);
         }
     }
 
@@ -136,7 +136,7 @@ public class SuperOutput {
             return;
         for (Object arg : args)
         {
-            pw.printf("\n" + arg);
+            pw.print("\n" + arg);
         }
     }
 
@@ -146,7 +146,7 @@ public class SuperOutput {
     public void printlnFile() {
         if (pw == null)
             return;
-        pw.printf("\n");
+        pw.print("\n");
     }
 
     /**

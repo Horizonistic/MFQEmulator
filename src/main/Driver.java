@@ -11,6 +11,10 @@ public class Driver
         MFQ mfq = new MFQ(so);
 
         mfq.readFile();
+        mfq.printHeader();
         mfq.runEmulator();
+        mfq.printStats();
+
+        so.close();
     }
 }

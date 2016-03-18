@@ -2,43 +2,85 @@ package main;
 
 public class CPU
 {
-    public Job job;
-    public int time;
+    private Job job;
+    private int time;
     public int quantumRemaining;
-    public boolean flag;
+    private boolean busy;
 
-
-    public int tick()
-    {
-
-        if (flag)
+    public void tick()
+    {/*
+        try
         {
-            this.job.setTimeRemaining(this.job.getTimeRemaining() - 1);
-            this.quantumRemaining--;
-
-            if (this.job.getTimeRemaining() == 0)
-            {
-                this.flag = false;
-            }
-            else if (this.quantumRemaining == 0)
-            {
-                this.job.incrementQueueLevel();
-            }
+            Thread.sleep(1000);
         }
-
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }*/
         this.time++;
-        return this.time;
     }
 
-    public Job setNewJob(Job job)
+    public Job setJob(Job job)
     {
-        Job temp = this.job;
-        this.job = job;
-        return temp;
+        if (this.job != null && job != null)
+        {
+            Job temp = this.job;
+            this.job = job;
+            setQuantum((int) Math.pow(2, this.job.getCurrentLevel()));
+            return temp;
+        }
+        else if (job == null)
+        {
+            Job temp = this.job;
+            this.job = job;
+            setQuantum(0);
+            return temp;
+        }
+        else
+        {
+            this.job = job;
+            setQuantum((int) Math.pow(2, this.job.getCurrentLevel()));
+            return null;
+        }
     }
 
     public Object getCurrentJob()
     {
         return this.job;
+    }
+
+    public int getCurrentTime()
+    {
+        return this.time;
+    }
+
+    public void decrementQuantum()
+    {
+        this.quantumRemaining--;
+    }
+
+    public void setQuantum(int time)
+    {
+        this.quantumRemaining = time;
+    }
+
+    public int getQuantum()
+    {
+        return this.quantumRemaining;
+    }
+
+    public void setCpuAsBusy()
+    {
+        this.busy = true;
+    }
+
+    public void setCpuAsNotBusy()
+    {
+        this.busy = false;
+    }
+
+    public boolean isBusy()
+    {
+        return this.busy;
     }
 }

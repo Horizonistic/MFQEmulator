@@ -1,7 +1,5 @@
 package util;
 
-import main.Job;
-
 public class ObjectQueue
 {
     private Object[] item;
@@ -51,6 +49,7 @@ public class ObjectQueue
         if (isEmpty())
         {
             System.out.println("Queue Underflow");
+            new Exception().getStackTrace();
             System.exit(1);
         }
 
@@ -69,7 +68,12 @@ public class ObjectQueue
     {
         if (isEmpty())
         {
-            System.out.println("Queue Underflow");
+            System.out.println("Queue Underflow2");
+            StackTraceElement[] array = Thread.currentThread().getStackTrace();
+            for (StackTraceElement e : array)
+            {
+                System.out.println(e.toString());
+            }
             System.exit(1);
         }
         return item[front];
@@ -86,15 +90,5 @@ public class ObjectQueue
         front = 0;
         rear = count - 1;
         item = temp;
-    }
-
-    public void dump(SuperOutput so)
-    {
-        for (int i = 0; i < this.count; i++)
-        {
-            so.println(((Job) this.query()).pid);
-            this.insert(this.remove());
-        }
-
     }
 }

@@ -2,6 +2,13 @@ package main;
 
 import util.SuperOutput;
 
+/**
+ * The main driver.  This class acts as a controller, managing
+ * SuperOutput and the MFQ.
+ *
+ * @author Horizonistic
+ * @version 1.0
+ */
 public class Driver
 {
     public static void main(String[] args)

@@ -7,8 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class MFQ
@@ -21,124 +19,6 @@ public class MFQ
     private ObjectQueue level3 = new ObjectQueue();
     private ObjectQueue level4 = new ObjectQueue();
     private Stats stats = new Stats();
-
-    private class Stats
-    {
-
-        private int totalJobs = 0;
-        private List<Integer> totalJobTimes = new ArrayList<Integer>();
-        private List<Long> responseTimes = new ArrayList<Long>();
-        private List<Integer> waitingTimes = new ArrayList<Integer>();
-        private List<Integer> neededCpuTimes = new ArrayList<Integer>();
-        private int totalIdleTime = 0;
-
-        public void incrementTotalJobs()
-        {
-            this.totalJobs++;
-        }
-
-        public int getTotalJobs()
-        {
-            return this.totalJobs;
-        }
-
-        public void addTotalJobTime(int time)
-        {
-            this.totalJobTimes.add(time);
-        }
-
-        public int getTotalJobTime()
-        {
-            int total = 0;
-            for (int n : this.totalJobTimes)
-            {
-                total += n;
-            }
-            return total;
-        }
-
-        public double getAverageThroughput()
-        {
-            return this.totalJobs / Float.valueOf(this.getTotalJobTime());
-        }
-
-        public void addResponseTime(long time)
-        {
-            this.responseTimes.add(time);
-        }
-
-        public double averageResponseTime()
-        {
-            int total = 0;
-            int count = 0;
-            for (long n : this.responseTimes)
-            {
-                total += n;
-                count++;
-            }
-
-            return (total / count) / 100000.0d;
-        }
-
-        public double averageTurnaroundTime()
-        {
-            int total = 0;
-            int count = 0;
-            for (int n : this.totalJobTimes)
-            {
-                total += n;
-                count++;
-            }
-
-            return total / count;
-        }
-
-        public void addWaitingTime(int time)
-        {
-            this.waitingTimes.add(time);
-        }
-
-        public double averageWaitingTime()
-        {
-            int total = 0;
-            int count = 0;
-            for (int n : this.waitingTimes)
-            {
-                total += n;
-                count++;
-            }
-
-            return total / count;
-        }
-
-        public void addNeededCpuTime(int time)
-        {
-            this.neededCpuTimes.add(time);
-        }
-
-        public int getNeededCpuTimeAverage()
-        {
-            int total = 0;
-            int count = 0;
-            for (int n : this.neededCpuTimes)
-            {
-                total += n;
-                count++;
-            }
-
-            return total / count;
-        }
-
-        public void incrementTotalIdleTime()
-        {
-            this.totalIdleTime++;
-        }
-
-        public int getTotalIdleTime()
-        {
-            return this.totalIdleTime;
-        }
-    }
 
     public MFQ(SuperOutput so)
     {
@@ -191,7 +71,7 @@ public class MFQ
     {
         while (true)
         {
-            cpu.tick();
+            this.cpu.tick();
             doLogic();
             if (checkIfDone())
             {
@@ -233,7 +113,7 @@ public class MFQ
                     this.cpu.setCpuAsNotBusy();
                 }
                 this.so.printlnf("| %-10s | %-15d | %-8d | %-20s | %-25s | %-25s |", "Departure", time, temp.pid, "-", time - temp.arrivalTime, temp.getCurrentLevel());
-                this.stats.addTotalJobTime(time - temp.arrivalTime);
+                this.stats.addTotalJobTime(temp.pid, time - temp.arrivalTime);
                 printTableLine();
             }
             // If time is up for job
@@ -244,7 +124,8 @@ public class MFQ
                 temp.setTimeBeforeQueue(time);
                 insertJobToQueue(temp);
                 Job next = this.getNextJob();
-                stats.addWaitingTime(time - next.getTimeBeforeQueue());
+                this.stats.addWaitingTime(next.pid, time - next.getTimeBeforeQueue());
+
                 if (next != null)
                 {
                     this.cpu.setJob(next);
@@ -266,12 +147,12 @@ public class MFQ
             {
                 job = (Job) this.jobsHolding.remove();
                 this.stats.incrementTotalJobs();
-                this.stats.addNeededCpuTime(job.getTimeRequired());
+                this.stats.addNeededCpuTime(job.pid, job.getTimeRequired());
                 job.setResponseTime(System.nanoTime());
                 this.so.printlnf("| %-10s | %-15d | %-8d | %-20s | %-25s | %-25s |", "Arrival", time, job.pid, job.getTimeRequired(), "-", "-");
                 printTableLine();
 
-                this.stats.addResponseTime(System.nanoTime() - job.getResponseTime());
+                this.stats.addResponseTime(job.pid, System.nanoTime() - job.getResponseTime());
                 job = this.cpu.setJob(job);
                 if (job != null)
                 {
@@ -345,19 +226,19 @@ public class MFQ
         switch (level)
         {
             case 1:
-                level1.insert(job);
+                this.level1.insert(job);
                 break;
 
             case 2:
-                level2.insert(job);
+                this.level2.insert(job);
                 break;
 
             case 3:
-                level3.insert(job);
+                this.level3.insert(job);
                 break;
 
             case 4:
-                level4.insert(job);
+                this.level4.insert(job);
                 break;
 
             default:
@@ -383,10 +264,13 @@ public class MFQ
         this.so.print(this.stats.averageWaitingTime());
 
         this.so.println("Throughput (jobs/total time): ");
-        this.so.printf("%.2f", this.stats.getAverageThroughput());
+        this.so.printf("%.2f", this.stats.averageThroughput());
 
         this.so.println("Total CPU Idle Time (ticks): ");
-        this.so.print(this.stats.getTotalIdleTime());
+        this.so.print(this.stats.totalIdleTime());
+
+        this.so.println("Average CPU Time Needed (ticks): ");
+        this.so.printf("%.2f", this.stats.averageCpuTimeNeeded());
     }
 
     private void printTableLine()

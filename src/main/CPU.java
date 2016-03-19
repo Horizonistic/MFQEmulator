@@ -8,15 +8,15 @@ public class CPU
     private boolean busy;
 
     public void tick()
-    {/*
+    {
         try
         {
-            Thread.sleep(1000);
+            Thread.sleep(10); // For fun!
         }
         catch (InterruptedException e)
         {
             e.printStackTrace();
-        }*/
+        }
         this.time++;
     }
 

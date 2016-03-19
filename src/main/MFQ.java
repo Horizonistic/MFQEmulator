@@ -9,6 +9,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+/**
+ * The main controller for the CPU.  It manages the queues, processes
+ * all the logic to figure out what to pass to the CPU, outputs the
+ * table, and manages the statistics using the Stats class.
+ *
+ * @author Horizonistic
+ * @version 1.3.2
+ */
 public class MFQ
 {
     SuperOutput so;
@@ -20,12 +28,21 @@ public class MFQ
     private ObjectQueue level4 = new ObjectQueue();
     private Stats stats = new Stats();
 
+    /**
+     * Sets local SuperOutput and instantiates the CPU.
+     *
+     * @param so  The SuperOutput to use for prints
+     */
     public MFQ(SuperOutput so)
     {
         this.so = so;
         this.cpu = new CPU();
     }
 
+    /**
+     * Reads the input file and stores all the data in a
+     * temporary holding queue.
+     */
     public void readFile()
     {
         String filename = "mfq.txt";
@@ -60,6 +77,9 @@ public class MFQ
         }
     }
 
+    /**
+     * Prints the header for the ASCII table.
+     */
     public void printHeader()
     {
         printTableLine();
@@ -67,6 +87,10 @@ public class MFQ
         printTableLine();
     }
 
+    /**
+     * Calls the appropriate methods to run the entire simulation,
+     * such as the ticking of the CPU, the logic, and when its done.
+     */
     public void runEmulator()
     {
         while (true)
@@ -80,6 +104,11 @@ public class MFQ
         }
     }
 
+    /**
+     * Does the majority of the problem solving for the MFQ,
+     * This method talk to the CPU and determines what jobs go
+     * where and when.
+     */
     private void doLogic()
     {
         int time = cpu.getCurrentTime();
@@ -165,6 +194,12 @@ public class MFQ
         }
     }
 
+    /**
+     * Checks if there really is no more work for the
+     * CPU to do, so as to end the simulation.
+     *
+     * @return  If done or not
+     */
     public boolean checkIfDone()
     {
         if (this.jobsHolding.isEmpty())
@@ -195,6 +230,12 @@ public class MFQ
         return false;
     }
 
+    /**
+     * Gets the next appropriate job for the CPU
+     * to work on.
+     *
+     * @return  The next job in line
+     */
     public Job getNextJob()
     {
         if (!this.level1.isEmpty())
@@ -219,6 +260,12 @@ public class MFQ
         }
     }
 
+    /**
+     * Inserts passed job into the appropriate queue based on
+     * its queue level.
+     *
+     * @param job  The job to insert into the queues
+     */
     public void insertJobToQueue(Job job)
     {
         int level = job.getCurrentLevel();
@@ -246,6 +293,10 @@ public class MFQ
         }
     }
 
+    /**
+     * Interacts with the Stats class in order to display the
+     * appropriate statistics.
+     */
     public void printStats()
     {
         this.so.println("Total Jobs: ");
@@ -273,6 +324,9 @@ public class MFQ
         this.so.printf("%.2f", this.stats.averageCpuTimeNeeded());
     }
 
+    /**
+     * Prints an ASCII horizontal line for use in the table.
+     */
     private void printTableLine()
     {
         this.so.printlnf("--------------------------------------------------------------------------------------------------------------------------");

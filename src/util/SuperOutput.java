@@ -14,7 +14,8 @@ public class SuperOutput {
     PrintWriter pw;
 
     /**
-     * Constructor for SuperOutput objects
+     * Constructor for SuperOutput objects.
+     *
      * @param fileName the name of the file to print to
      */
     public SuperOutput(String fileName) {
@@ -29,8 +30,9 @@ public class SuperOutput {
 
     /**
      * Forwards a string of format specifiers and varargs
-     * to two printf statements
-     * @param args  each item to print
+     * to two printf statements.
+     *
+     * @param args  Each item to print
      */
 
     public void print(Object... args) {
@@ -45,7 +47,8 @@ public class SuperOutput {
 
     /**
      * Prints the provided string and vargs using printf to
-     * both the console and the file
+     * both the console and the file.
+     *
      * @param string  The String to print
      * @param args  The arguments for printf
      */
@@ -59,7 +62,7 @@ public class SuperOutput {
 
 
     /**
-     * Outputs solely a newline character to the console and the file
+     * Outputs solely a newline character to the console and the file.
      */
     public void println()
     {
@@ -70,7 +73,8 @@ public class SuperOutput {
     }
 
     /**
-     * Same as this.print(), only prints on its own line
+     * Same as this.print(), only prints on its own line.
+     *
      * @param args  arguments to pass to print
      */
     public void println(Object... args) {
@@ -85,7 +89,8 @@ public class SuperOutput {
 
     /**
      * Prints the provided string and vargs on a new line using
-     * printf to both the console and the file
+     * printf to both the console and the file.
+     *
      * @param string  The String to print
      * @param args  The arguments for printf
      */
@@ -101,6 +106,7 @@ public class SuperOutput {
      * Forwards a string of format specifiers and varargs
      * to just the file. This is used for echoing items
      * the user may have input.
+     *
      * @param args  arguments to pass to print
      */
     public void printFile(Object... args) {
@@ -114,7 +120,8 @@ public class SuperOutput {
 
     /**
      * Prints the provided string and vargs on a new line using
-     * printf to just the file
+     * printf to just the file.
+     *
      * @param string  The String to print
      * @param args  The arguments for printf
      */
@@ -127,7 +134,7 @@ public class SuperOutput {
 
 
     /**
-     * The same as this.printFile(), only prints on its own line
+     * The same as this.printFile(), only prints on its own line.
      *
      * @param args  arguments to pass to print
      */
@@ -141,7 +148,7 @@ public class SuperOutput {
     }
 
     /**
-     * Outputs solely a newline character to the file
+     * Outputs solely a newline character to the file.
      */
     public void printlnFile() {
         if (pw == null)
@@ -151,7 +158,8 @@ public class SuperOutput {
 
     /**
      * Prints the provided string and vargs on a new line using
-     * printf to both the console and the file
+     * printf to both the console and the file.
+     *
      * @param string  The String to print
      * @param args  The arguments for printf
      */
@@ -163,7 +171,7 @@ public class SuperOutput {
     }
 
     /**
-     * Closes the SuperOutput object
+     * Closes the SuperOutput object.
      */
     public void close () {
         if (pw != null) {

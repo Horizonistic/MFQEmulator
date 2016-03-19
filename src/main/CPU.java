@@ -12,7 +12,7 @@ public class CPU
 {
     private Job job;
     private int time;
-    public int quantumRemaining;
+    private int quantumRemaining;
     private boolean busy;
 
     /**
